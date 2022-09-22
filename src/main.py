@@ -69,8 +69,8 @@ def get_eew():
   try:
     res = requests.get(url, timeout=3.0)   ### get
   except Exception:
-    print("Error1")
-    return 0x0201, None, None
+    print(">Error get nied.")
+    return 0x0201, None
 
   #satatus
   if res.status_code == 200:
@@ -178,8 +178,8 @@ def get_eqinfo():
   try:
     res = requests.get(url, params=params, timeout=3.0)   ### get
   except Exception:
-    print("Error2")
-    return 0x0202, None, None
+    print(">Error get p2pquake")
+    return 0x0202, None
 
   if res.status_code == 200:
     try:
