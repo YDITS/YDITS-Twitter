@@ -339,28 +339,32 @@ while True:
 
   get_time()
 
+  #eew
   if cnt_getEew >= 1:
 
     cnt_getEew = 0
     eew_code, eew_content = get_eew()
 
-    if eew_repNum_last != eew_repNum and eew_repNum != '' and eew_repNum_last != -1:
+    if eew_repNum_last != eew_repNum and eew_repNum != '':
       eew_repNum_last = eew_repNum
       gotNewdata()
       upload(eew_content)
       put_waiting()
 
-
+  #eqinfo
   if cnt_getEqinfo >= 10:
 
     cnt_getEqinfo = 0
     eqinfo_code, eqinfo_content = get_eqinfo()
 
-    if eqinfo_id_last != eqinfo_id and eqinfo_id_last != -1:
+    if eqinfo_id_last != eqinfo_id:
       eqinfo_id_last = eqinfo_id
-      gotNewdata()
-      upload(eqinfo_content)
-      put_waiting()
+      if eqinfo_id_last == -1:
+        pass
+      else:
+        gotNewdata()
+        upload(eqinfo_content)
+        put_waiting()
 
   #Update
   cnt_getEew += 1
