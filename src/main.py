@@ -160,7 +160,21 @@ def get_eew():
             f'　予想深さ　：{eew_depth}\n\n'+\
              '今後の情報に注意してください\n\n'+\
              '#地震 #地震速報'
-  return 0x0101, content
+  
+  eew_postInts = [
+    '3',
+    '4',
+    '5弱',
+    '5強',
+    '6弱',
+    '6強',
+    '7'
+  ]
+
+  if eew_maxInt in eew_postInts:
+    return 0x0102, content
+  else:
+    return 0x0101, None
 
 
 def get_eqinfo():
@@ -240,7 +254,7 @@ def get_eqinfo():
   }
 
   if eqinfo_maxScale in eqinfo_Scales:
-    eqinfo_maxScale = eqinfo_Scales[eqinfo_maxScale]
+    eqinfo_maxScale_put = eqinfo_Scales[eqinfo_maxScale]
 
   #magnitude
   eqinfo_magnitude = data[0]['earthquake']['hypocenter']['magnitude']
@@ -285,12 +299,16 @@ def get_eqinfo():
   content = f'[{eqinfo_type}]\n'+\
             f'発生日時：{eqinfo_timeDay}日{eqinfo_timeHour}時{eqinfo_timeMinute}分頃\n'+\
             f'　震源　：{eqinfo_hypo}\n'+\
-            f'最大震度：{eqinfo_maxScale}\n'+\
+            f'最大震度：{eqinfo_maxScale_put}\n'+\
             f'　規模　：{eqinfo_magnitude}\n'+\
             f'　深さ　：{eqinfo_depth}\n'+\
             f'{eqinfo_tsunami}\n\n'+\
              '#地震 #地震速報'
-  return 0x0101, content
+
+  if eqinfo_maxScale >= 30:
+    return 0x0102, content
+  else:
+    return 0x0101, None
 
 
 def put_waiting():
@@ -345,7 +363,7 @@ while True:
     cnt_getEew = 0
     eew_code, eew_content = get_eew()
 
-    if eew_repNum_last != eew_repNum and eew_repNum != '':
+    if eew_repNum_last != eew_repNum and eew_repNum != '' and eew_code == 0x0102:
       eew_repNum_last = eew_repNum
       gotNewdata()
       upload(eew_content)
@@ -357,14 +375,12 @@ while True:
     cnt_getEqinfo = 0
     eqinfo_code, eqinfo_content = get_eqinfo()
 
-    if eqinfo_id_last != eqinfo_id:
-      eqinfo_id_last = eqinfo_id
-      if eqinfo_id_last == -1:
-        pass
-      else:
+    if eqinfo_id_last != eqinfo_id and eqinfo_code == 0x0102:
+      if eqinfo_id_last != -1:
         gotNewdata()
         upload(eqinfo_content)
         put_waiting()
+      eqinfo_id_last = eqinfo_id
 
   #Update
   cnt_getEew += 1
