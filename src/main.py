@@ -296,7 +296,7 @@ def get_eqinfo():
   eqinfo_timeMinute = eqinfo_time[14:16]
   eqinfo_timeSecond = eqinfo_time[17:19]
 
-  content = f'[{eqinfo_type}]\n'+\
+  content = f'[#地震情報]\n'+\
             f'発生日時：{eqinfo_timeDay}日{eqinfo_timeHour}時{eqinfo_timeMinute}分頃\n'+\
             f'　震源　：{eqinfo_hypo}\n'+\
             f'最大震度：{eqinfo_maxScale_put}\n'+\
