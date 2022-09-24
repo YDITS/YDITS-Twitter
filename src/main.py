@@ -13,11 +13,11 @@ from time import sleep
 import requests
 from requests_oauthlib import OAuth1Session
 
+#Config
 from data.config import version, CLIENT
 
 
 # ---------- Main ---------- #
-
 os.system('cls')
 print(
     f"YDITS for Twitter  {version}\n"+\
@@ -60,6 +60,7 @@ def make_getNiedDT():
 def get_eew():
 
   global eew_repNum
+  global eew_isFinal
 
   #makeUrl
   getNiedDT = make_getNiedDT()
@@ -323,6 +324,8 @@ def gotNewdata():
 
 def upload(content):
 
+  global eew_tree
+
   twitter = OAuth1Session(
             CLIENT['CONSUMER_KEY'], CLIENT['CONSUMER_SECRET'], 
             CLIENT['ACCESS_TOKEN'], CLIENT['ACCESS_TOKEN_SECRET']
@@ -330,11 +333,22 @@ def upload(content):
 
   url = 'https://api.twitter.com/1.1/statuses/update.json'
 
-  params = {
-    'status': content
-  }
+  if eew_tree != "":
+    params = {
+      'status': content,
+      'in_reply_to_status_id': eew_tree
+    }
+  else:
+    params = {
+      'status': content
+    }
 
   res = twitter.post(url, params=params)
+
+  if eew_isFinal:
+    eew_tree = ""
+  else:
+    eew_tree = res.id_str
 
   if res.status_code == 200:
     print('Successfully distributed.\n')
@@ -349,6 +363,8 @@ eqinfo_id_last  = -1
 
 cnt_getEew    = 0
 cnt_getEqinfo = 0
+
+eew_tree = ""
 
 put_waiting()
 
