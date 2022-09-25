@@ -6,7 +6,7 @@
 #
 
 #バージョン
-version = "2.1.4"
+version = "2.2.0"
 
 #API Keys
 CLIENT = {

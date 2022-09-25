@@ -193,7 +193,7 @@ def get_eqinfo():
   try:
     res = requests.get(url, params=params, timeout=3.0)   ### get
   except Exception:
-    print(">Error get p2pquake")
+    print(">Error get p2pquake eqinfo.")
     return 0x0202, None
 
   if res.status_code == 200:
@@ -312,6 +312,100 @@ def get_eqinfo():
     return 0x0101, None
 
 
+def get_tsunamiInfo():
+
+    global tnmInfo_id
+
+    url = "https://api.p2pquake.net/v2/history/"
+
+    params = {
+        'zipcode': '',
+        'codes': '552',
+        'limit': '1'
+    }
+
+    try:
+        res = requests.get(url, params=params, timeout=3.0)   ### get
+    except Exception as e:
+        print(">Error get p2pquake Tsunami info.")
+        return 0x0202, e
+
+    #satatus
+    if res.status_code == 200:
+        try:
+            data = json.loads(res.text)
+        except Exception:
+            pass
+
+    elif res.status_code == 502:
+        pass
+
+    elif res.status_code == 404:
+        print(f'HTTP 404: The specified server cannot be found.')
+
+    elif res.status_code == 429:
+        print(f'HTTP 429: Too many requests.')
+
+    else:
+        print(f'HTTP {res.status_code} has occurred.')
+
+    # ----- data ----- #
+
+    #time
+    tnmInfo_time = data[0]['time']
+
+    #id
+    tnmInfo_id = data[0]['id']
+
+    #cancelled
+    tnmInfo_cancelled = data[0]['cancelled']
+
+    #areas
+    tnmInfo_areas = data[0]['areas']
+
+    tnmInfo_timeYear   = tnmInfo_time[0:4]
+    tnmInfo_timeMonth  = tnmInfo_time[5:7]
+    tnmInfo_timeDay    = tnmInfo_time[8:10]
+    tnmInfo_timeHour   = tnmInfo_time[11:13]
+    tnmInfo_timeMinute = tnmInfo_time[14:16]
+    tnmInfo_timeSecond = tnmInfo_time[17:19]
+
+    if data[0]['cancelled'] == False:
+
+        #content
+        content =  "【#津波情報】\n"+\
+                f"発表日時: {tnmInfo_timeDay}日{tnmInfo_timeHour}時{tnmInfo_timeMinute}分\n\n"+\
+                "海岸から離れてください\n"
+
+        #list
+        lastGrade = ""
+
+        for area in tnmInfo_areas:
+
+            name  = area['name']
+            grade = area['grade']
+
+            if grade != lastGrade:
+                if grade == "MajorWarning":
+                    content += "\n[#大津波警報]\n"
+                elif grade == "Warning":
+                    content += "\n[#津波警報]\n"
+                elif grade == "Watch":
+                    content += "\n[#津波注意報]\n"
+                else:
+                    content += "\n[不明]\n"
+                lastGrade = grade
+
+            content += f"{name}\n"
+
+    elif data[0]['cancelled'] == True:
+        content = "【#津波情報】\n"+\
+                  "津波警報等はすべて解除されました。"
+
+    #return
+    return 0x0102, content
+
+
 def put_waiting():
   print('>Waiting for EEW and earthquake information.\n')
 
@@ -348,7 +442,7 @@ def upload(content):
   if eew_isFinal:
     eew_tree = ""
   else:
-    eew_tree = res.id_str
+    eew_tree = res['id_str']
 
   if res.status_code == 200:
     print('Successfully distributed.\n')
@@ -358,11 +452,13 @@ def upload(content):
 
 # ---------- Init ---------- #
 
-eew_repNum_last = -1
-eqinfo_id_last  = -1
+eew_repNum_last     = -1
+eqinfo_id_last      = -1
+tsunamiInfo_id_last = -1
 
 cnt_getEew    = 0
 cnt_getEqinfo = 0
+cnt_getTsunamiInfo = 0
 
 eew_tree = ""
 
@@ -398,8 +494,22 @@ while True:
         put_waiting()
       eqinfo_id_last = eqinfo_id
 
+  #tsunamiInfo
+  if cnt_getTsunamiInfo >= 60:
+
+    cnt_getTsunamiInfo = 0
+    tsunamiInfo_code, tsunamiInfo_content = get_tsunamiInfo()
+
+    if tsunamiInfo_id_last != tnmInfo_id and tsunamiInfo_code == 0x0102:
+      if tsunamiInfo_id_last != -1:
+        gotNewdata()
+        upload(tsunamiInfo_content)
+        put_waiting()
+      tsunamiInfo_id_last = tnmInfo_id
+
   #Update
   cnt_getEew += 1
-  cnt_getEqinfo  += 1
+  cnt_getEqinfo += 1
+  cnt_getTsunamiInfo += 1
 
   sleep(1)
