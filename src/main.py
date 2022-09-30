@@ -25,6 +25,7 @@ print(
     f"--------------------\n"
 )
 
+
 # ---------- Functions ---------- #
 def get_time():
   global DT
@@ -439,15 +440,15 @@ def upload(content):
 
   res = twitter.post(url, params=params)
 
-  if eew_isFinal:
-    eew_tree = ""
-  else:
-    eew_tree = res['id_str']
-
   if res.status_code == 200:
+    if eew_isFinal:
+        eew_tree = ""
+    else:
+      data = json.loads(res.text)
+      eew_tree = data['id_str']
     print('Successfully distributed.\n')
   else:
-    print(f'Could not be distributed. Error Code：{res.status_code}\n')
+    print(f'Could not be distributed. Error Code: {res.status_code}\n')
 
 
 # ---------- Init ---------- #
@@ -460,6 +461,7 @@ cnt_getEew    = 0
 cnt_getEqinfo = 0
 cnt_getTsunamiInfo = 0
 
+eew_isFinal = False
 eew_tree = ""
 
 put_waiting()
