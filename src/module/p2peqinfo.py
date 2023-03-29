@@ -4,7 +4,7 @@
 # (c) 2022-2023 よね/Yone
 # licensed under the Apache License 2.0
 #
-import inspect
+
 import json
 import requests
 

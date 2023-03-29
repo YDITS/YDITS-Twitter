@@ -1,17 +1,18 @@
 #
-# data\config.py | YDITS for Twitter
+# config.py | data | YDITS for Twitter
 #
 # (c) 2022-2023 よね/Yone
-# licensed under the Apache License 2.0
+# Licensed under the Apache License 2.0
 #
 
-#バージョン
-version = "2.3.0"
+VERSION = "2.4.0"
 
-#API Keys
-CLIENT = {
-    'CONSUMER_KEY': '',
-    'CONSUMER_SECRET': '',
-    'ACCESS_TOKEN': '',
-    'ACCESS_TOKEN_SECRET': '',
+TWITTER_API = {
+    'URL': 'https://api.twitter.com/1.1/statuses/update.json',
+    'CLIENT': {
+        'CONSUMER_KEY': '',
+        'CONSUMER_SECRET': '',
+        'ACCESS_TOKEN': '',
+        'ACCESS_TOKEN_SECRET': ''
+    }
 }

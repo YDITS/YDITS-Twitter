@@ -2,10 +2,10 @@
 # kmoni.py | module | YDITS for Twitter
 #
 # (c) 2022-2023 よね/Yone
-# licensed under the Apache License 2.0
+# Licensed under the Apache License 2.0
 #
+
 import datetime
-import inspect
 import json
 import requests
 
