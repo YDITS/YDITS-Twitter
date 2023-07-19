@@ -15,6 +15,7 @@ import json
 from requests_oauthlib import OAuth1Session
 
 from . import api
+from ydits_twitter.database import Database
 
 
 class YditsTwitter:
@@ -23,8 +24,9 @@ class YditsTwitter:
         *,
         consumer_key: str,
         consumer_secret: str,
-        access_token: None | str = None,
-        access_token_secret: None | str = None,
+        access_token: None | str,
+        access_token_secret: None | str,
+        database: Database,
     ) -> None:
         self.get_date()
 
@@ -44,6 +46,17 @@ class YditsTwitter:
             )
             access_token = oauth_tokens["oauth_token"]
             access_token_secret = oauth_tokens["oauth_token_secret"]
+            database.set_twitter_token(name="accessToken", value=access_token)
+            database.set_twitter_token(
+                name="accessTokenSecret", value=access_token_secret
+            )
+
+        print(
+            f"{consumer_key}\n"
+            f"{consumer_secret}\n"
+            f"{access_token}\n"
+            f"{access_token_secret}"
+        )
 
         self.client = OAuth1Session(
             consumer_key,
@@ -65,6 +78,10 @@ class YditsTwitter:
 
         request_token = api.twitter.RequestToken(oauth=oauth)
         tokens = request_token.get_token()
+        if tokens is None:
+            print("[ERROR] Consumer Key もしくは Consumer Secret Key が不正です。")
+            exit()
+
         owner_key = tokens.get("oauth_token")
         owner_secret = tokens.get("oauth_token_secret")
 
@@ -118,10 +135,7 @@ class YditsTwitter:
 
                 if eqinfoData["status"] == 0x0101:
                     self.eqinfo_id = eqinfoData["data"]["raw"][0]["id"]
-                    if (
-                        self.eqinfo_id_last != self.eqinfo_id
-                        and self.eqinfo_id_last != -1
-                    ):
+                    if self.eqinfo_id_last != self.eqinfo_id:
                         self.upload(eqinfoData["data"]["text"], False)
                         self.eqinfo_id_last = self.eqinfo_id
                 else:
@@ -137,8 +151,6 @@ class YditsTwitter:
             self.cnt_getEqinfo += 1
 
             await asyncio.sleep(1)
-
-        return None
 
     def error(self, errCode, line, errContent) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
@@ -160,17 +172,14 @@ class YditsTwitter:
         else:
             data = {"text": content}
 
-        response = self.client.post(
-            "https://api.twitter.com/2/tweets",
-            json=data,
-        )
+        response = self.client.post("https://api.twitter.com/2/tweets", json=data)
 
         if response.status_code == 201:
             if eew_isFinal:
                 self.eew_tree = ""
             else:
                 data = json.loads(response.text)
-                self.eew_tree = data["id_str"]
+                self.eew_tree = data["data"]["id"]
             print("Successfully distributed.\n")
         else:
             self.error(

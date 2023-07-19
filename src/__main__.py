@@ -33,18 +33,25 @@ class App:
             print(f"[ERROR] データベースの読み込みに失敗しました。\n{error}")
             return None
 
-        if (access_token is None) or (access_tokenr_secret is None):
-            ydits_twitter.YditsTwitter()
+        if (access_token is not None) and (access_token != []):
+            access_token = access_token[0][0]
         else:
-            ydits_twitter.YditsTwitter(
-                consumer_key=config.TWITTER_API["consumerKey"],
-                consumer_secret=config.TWITTER_API["consumerSecret"],
-                access_token=access_token,
-                access_token_secret=access_tokenr_secret,
-            )
+            access_token = None
+
+        if (access_tokenr_secret is not None) and (access_tokenr_secret != []):
+            access_tokenr_secret = access_tokenr_secret[0][0]
+        else:
+            access_tokenr_secret = None
+
+        ydits_twitter.YditsTwitter(
+            consumer_key=config.TWITTER_API["consumerKey"],
+            consumer_secret=config.TWITTER_API["consumerSecret"],
+            access_token=access_token,
+            access_token_secret=access_tokenr_secret,
+            database=database,
+        )
 
         return None
-
 
     def clear_console(self) -> int:
         if os.name in ("nt", "dos"):
