@@ -10,7 +10,7 @@ import json
 import requests
 
 
-async def get_eqinfo():
+async def get_eqinfo() -> None | dict:
     url = "https://api.p2pquake.net/v2/history/"
 
     params = {"zipcode": "", "codes": "551", "limit": "1"}

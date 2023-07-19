@@ -43,6 +43,7 @@ class App:
 
         return None
 
+
     def clear_console(self) -> int:
         if os.name in ("nt", "dos"):
             return os.system(command="cls")

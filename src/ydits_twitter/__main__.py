@@ -9,7 +9,6 @@ import asyncio
 import datetime
 import inspect
 import json
-from time import sleep
 
 from requests_oauthlib import OAuth1Session
 
@@ -57,6 +56,8 @@ class YditsTwitter:
 
         asyncio.run(self.mainloop())
 
+        return None
+
     def connection_setup(self, *, consumer_key: str, consumer_secret: str) -> dict:
         print("[INFO] アプリ連携が必要です。")
 
@@ -84,7 +85,7 @@ class YditsTwitter:
 
         return oauth_tokens
 
-    async def mainloop(self):
+    async def mainloop(self) -> None:
         while True:
             self.get_date()
 
@@ -137,21 +138,23 @@ class YditsTwitter:
 
             await asyncio.sleep(1)
 
-    def error(self, errCode, line, errContent):
+        return None
+
+    def error(self, errCode, line, errContent) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
         print(f"[ERROR]\n{date}; {hex(errCode)}; Line: {str(line)}\n{errContent}\n")
-        return
+        return None
 
-    def get_date(self):
+    def get_date(self) -> None:
         self.dateNow = datetime.datetime.now()
-        return
+        return None
 
-    def gotNewdata(self):
+    def gotNewdata(self) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
         print(f"[LOG]\n{date}; Earthquake information was retrieved.")
-        return
+        return None
 
-    def upload(self, content, eew_isFinal):
+    def upload(self, content, eew_isFinal) -> None:
         if self.eew_tree != "":
             data = {"text": content, "repry": {"in_reply_to_tweet_id": self.eew_tree}}
         else:
@@ -176,4 +179,4 @@ class YditsTwitter:
                 errContent=response.status_code,
             )
 
-        return
+        return None

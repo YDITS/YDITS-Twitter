@@ -5,7 +5,8 @@
 # licensed under the Apache License 2.0
 #
 
-from . import YditsTwitter
+from .__main__ import YditsTwitter
+
 
 __title__ = "YDITS for Twitter"
 __version__ = "3.0.0"

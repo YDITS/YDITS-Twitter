@@ -11,13 +11,13 @@ import json
 import requests
 
 
-def make_getNiedDT(DT):
+def make_getNiedDT(DT: datetime.datetime) -> datetime.timedelta:
     nideDate = DT + datetime.timedelta(seconds=-2)
     getNideDate = nideDate.strftime("%Y%m%d%H%M%S")
     return getNideDate
 
 
-async def get_eew(DT):
+async def get_eew(DT) -> None | dict:
     getNiedDate = make_getNiedDT(DT)
     url = (
         f"https://www.lmoni.bosai.go.jp/monitor/webservice/hypo/eew/{getNiedDate}.json"
