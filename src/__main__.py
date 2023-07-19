@@ -16,10 +16,12 @@ class App:
     def __init__(self) -> None:
         self.clear_console()
 
-        print(f"{ydits_twitter.__title__}\n"
-              f"{ydits_twitter.__copyright__}\n\n"
-              "--------------------\n")
-        
+        print(
+            f"{ydits_twitter.__title__}\n"
+            f"{ydits_twitter.__copyright__}\n\n"
+            "--------------------\n"
+        )
+
         try:
             database = Database(database_file=config.DATABASE_FILE_PATH)
             access_token = database.get_twitter_token(name="accessToken")
@@ -28,17 +30,18 @@ class App:
         except Exception as error:
             print(f"[ERROR] データベースの読み込みに失敗しました。\n{error}")
             return None
-        
-        if ((access_token is None) or (access_tokenr_secret is None)):
+
+        if (access_token is None) or (access_tokenr_secret is None):
             ydits_twitter.YditsTwitter()
         else:
-            ydits_twitter.YditsTwitter(consumer_key=config.TWITTER_API['consumerKey'],
-                                        consumer_secret=config.TWITTER_API['consumerSecret'],
-                                        access_token=access_token,
-                                        access_token_secret=access_tokenr_secret)
+            ydits_twitter.YditsTwitter(
+                consumer_key=config.TWITTER_API["consumerKey"],
+                consumer_secret=config.TWITTER_API["consumerSecret"],
+                access_token=access_token,
+                access_token_secret=access_tokenr_secret,
+            )
 
         return None
-
 
     def clear_console(self) -> int:
         if os.name in ("nt", "dos"):

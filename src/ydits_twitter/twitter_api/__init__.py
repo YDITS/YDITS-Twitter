@@ -16,14 +16,15 @@ class RequestToken:
         self.oauth = oauth
         return None
 
-
     def get_token(self) -> None | dict:
         try:
             response = self.oauth.fetch_request_token(self.request_token_url)
         except ValueError:
-            print("[ERROR] There may have been an issue with the consumer_key or consumer_secret you entered.")
+            print(
+                "[ERROR] There may have been an issue with the consumer_key or consumer_secret you entered."
+            )
             return None
-        
+
         return response
 
 
@@ -34,16 +35,23 @@ class Authorization:
         self.oauth = oauth
         return None
 
-
     def get_url(self) -> str:
         authorization_url = self.oauth.authorization_url(self.base_authorization_url)
         return authorization_url
-    
+
 
 class AccessToken:
     access_token_url = "https://api.twitter.com/oauth/access_token"
 
-    def __init__(self, *, consumer_key: str, consumer_secret: str, owner_key: str, owner_secret: str, verifier: str) -> None:
+    def __init__(
+        self,
+        *,
+        consumer_key: str,
+        consumer_secret: str,
+        owner_key: str,
+        owner_secret: str,
+        verifier: str
+    ) -> None:
         self.oauth = OAuth1Session(
             consumer_key,
             client_secret=consumer_secret,
@@ -51,7 +59,7 @@ class AccessToken:
             resource_owner_secret=owner_secret,
             verifier=verifier,
         )
-    
+
     def get_token(self) -> None | dict:
         try:
             oauth_tokens = self.oauth.fetch_access_token(self.access_token_url)

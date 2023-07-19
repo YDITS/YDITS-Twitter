@@ -7,9 +7,7 @@
 
 from . import YditsTwitter
 
-
 __title__ = "YDITS for Twitter"
 __version__ = "3.0.0"
 __author__ = "よね/Yone"
 __copyright__ = "Copyright (c) YDITS, よね/Yone"
-

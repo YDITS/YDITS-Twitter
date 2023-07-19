@@ -45,9 +45,7 @@ class Database:
     def get_twitter_token(self, *, name: str) -> list:
         db_con = self.connect()
         db_cur = self.cursor(connect=db_con)
-        db_cur.execute(
-            f"SELECT value FROM twitterApiConfig WHERE name=?", (name,)
-        )
+        db_cur.execute(f"SELECT value FROM twitterApiConfig WHERE name=?", (name,))
         data = db_cur.fetchall()
         self.save(connect=db_con)
         return data
@@ -55,7 +53,5 @@ class Database:
     def set_twitter_token(self, *, name: str, value: str) -> None:
         db_con = self.connect()
         db_cur = self.cursor(connect=db_con)
-        db_cur.execute(
-            "INSERT INTO twitterApiConfig VALUES(?, ?)", (name, value)
-        )
+        db_cur.execute("INSERT INTO twitterApiConfig VALUES(?, ?)", (name, value))
         self.save(connect=db_con)
