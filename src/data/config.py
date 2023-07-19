@@ -1,18 +1,13 @@
 #
 # config.py | data | YDITS for Twitter
 #
-# (c) 2022-2023 よね/Yone
+# Copyright (c) 2022-2023 YDITS, よね/Yone
 # Licensed under the Apache License 2.0
 #
 
-VERSION = "2.4.0"
+DATABASE_FILE_PATH = "savedata.db"
 
 TWITTER_API = {
-    'URL': 'https://api.twitter.com/1.1/statuses/update.json',
-    'CLIENT': {
-        'CONSUMER_KEY': '',
-        'CONSUMER_SECRET': '',
-        'ACCESS_TOKEN': '',
-        'ACCESS_TOKEN_SECRET': ''
-    }
+    "consumerKey": "QdFRAIL3edw9fiEQCbCw72klg",
+    "consumerSecret": "CqOjx4faeW0ZEBMJbT2eZDgGeRoKqT7IGqX5z2ROCErLxBpMLL"
 }
