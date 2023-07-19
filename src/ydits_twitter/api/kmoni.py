@@ -1,9 +1,11 @@
-#
-# kmoni.py | ydits_twitter/module | YDITS for Twitter
-#
-# Copyright (c) 2022-2023 よね/Yone
-# Licensed under the Apache License 2.0
-#
+"""
+
+kmoni.py | ydits_twitter/api | YDITS for Twitter
+
+Copyright (c) 2022-2023 よね/Yone
+Licensed under the Apache License 2.0
+
+"""
 
 import datetime
 import json

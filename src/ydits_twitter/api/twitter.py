@@ -1,9 +1,11 @@
-#
-# __init__.py | ydits_twitter/twitter_api | YDITS for Twitter
-#
-# Copyright (c) 2022-2023 よね/Yone
-# licensed under the Apache License 2.0
-#
+"""
+
+twitter.py | ydits_twitter/api | YDITS for Twitter
+
+Copyright (c) 2022-2023 よね/Yone
+licensed under the Apache License 2.0
+
+"""
 
 import requests_oauthlib
 from requests_oauthlib import OAuth1Session

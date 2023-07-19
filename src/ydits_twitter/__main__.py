@@ -1,9 +1,11 @@
-#
-# ydits_twitter.py | ydits_twitter | YDITS for Twitter
-#
-# Copyright (c) 2022-2023 よね/Yone
-# licensed under the Apache License 2.0
-#
+"""
+
+ydits_twitter.py | ydits_twitter | YDITS for Twitter
+
+Copyright (c) 2022-2023 よね/Yone
+licensed under the Apache License 2.0
+
+"""
 
 import asyncio
 import datetime
@@ -12,9 +14,7 @@ import json
 
 from requests_oauthlib import OAuth1Session
 
-from . import twitter_api
-from .module.kmoni import get_eew
-from .module.p2peqinfo import get_eqinfo
+from . import api
 
 
 class YditsTwitter:
@@ -63,18 +63,18 @@ class YditsTwitter:
 
         oauth = OAuth1Session(consumer_key, client_secret=consumer_secret)
 
-        request_token = twitter_api.RequestToken(oauth=oauth)
+        request_token = api.twitter.RequestToken(oauth=oauth)
         tokens = request_token.get_token()
         owner_key = tokens.get("oauth_token")
         owner_secret = tokens.get("oauth_token_secret")
 
-        authorization = twitter_api.Authorization(oauth=oauth)
+        authorization = api.twitter.Authorization(oauth=oauth)
         authorization_url = authorization.get_url()
         print("下記の連携用URLにアクセスして，アプリ連携をしてください。")
         print(f"{authorization_url}")
         verifier = input("認証ボタンをクリック後，表示された認証PINコードを入力> ")
 
-        get_access_token = twitter_api.AccessToken(
+        get_access_token = api.twitter.AccessToken(
             consumer_key=consumer_key,
             consumer_secret=consumer_secret,
             owner_key=owner_key,
@@ -90,7 +90,7 @@ class YditsTwitter:
             self.get_date()
 
             if self.cnt_getEew >= 1:
-                eewData = await get_eew(self.dateNow)
+                eewData = await api.kmoni.get_eew(self.dateNow)
 
                 if eewData["status"] == 0x0101:
                     self.eew_repNum = eewData["data"]["raw"]["report_num"]
@@ -114,7 +114,7 @@ class YditsTwitter:
                 self.cnt_getEew = 0
 
             if self.cnt_getEqinfo >= 10:
-                eqinfoData = await get_eqinfo()
+                eqinfoData = await api.p2peqinfo.get_eqinfo()
 
                 if eqinfoData["status"] == 0x0101:
                     self.eqinfo_id = eqinfoData["data"]["raw"][0]["id"]
