@@ -51,13 +51,6 @@ class YditsTwitter:
                 name="accessTokenSecret", value=access_token_secret
             )
 
-        print(
-            f"{consumer_key}\n"
-            f"{consumer_secret}\n"
-            f"{access_token}\n"
-            f"{access_token_secret}"
-        )
-
         self.client = OAuth1Session(
             consumer_key,
             client_secret=consumer_secret,
@@ -65,7 +58,7 @@ class YditsTwitter:
             resource_owner_secret=access_token_secret,
         )
 
-        print(">Waiting for EEW and earthquake information.\n")
+        print("\n>Waiting for EEW and earthquake information.", end="\n\n")
 
         asyncio.run(self.mainloop())
 
