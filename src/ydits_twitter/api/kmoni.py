@@ -1,9 +1,10 @@
 """
 
-kmoni.py | ydits_twitter/api | YDITS for Twitter
+YDITS for Twitter
 
-Copyright (c) 2022-2023 よね/Yone
-Licensed under the Apache License 2.0
+Copyright (c) よね/Yone
+
+Licensed under the Apache License 2.0.
 
 """
 

@@ -1,9 +1,10 @@
 """
 
-__main__.py | YDITS for Twitter
+YDITS for Twitter
 
-Copyright (c) 2022-2023 YDITS, よね/Yone
-Licensed under the Apache License 2.0
+Copyright (c) よね/Yone
+
+Licensed under the Apache License 2.0.
 
 """
 
