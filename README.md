@@ -19,6 +19,6 @@ python -m YDITS-Twitter
 
 ## LICENSE
 
-**No licensed.**
+Licensed under the [Apache License 2.0](https://github.com/YDITS/YDITS-Twitter/blob/main/LICENCE).
 
 Copyright (c) よね/Yone
