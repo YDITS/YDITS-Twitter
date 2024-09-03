@@ -1,24 +1,21 @@
-
 # YDITS for Twitter
+
+[→ 日本語](./README_JP.md)
 
 ## Overview
 
-Open source version of YDITS for Twitter.
+X (Twitter) bot providing disaster prevention information.
 
 ## Usage
 
-#### Developments
-
-- Python 3
-
-#### Run
+1. Run
 
 ```
-python -m YDITS-Twitter
+python -m src
 ```
 
 ## LICENSE
 
-Licensed under the [Apache License 2.0](https://github.com/YDITS/YDITS-Twitter/blob/main/LICENCE).
+Licensed under the [Apache License 2.0](./LICENSE).
 
-Copyright (c) よね/Yone
+Copyright (C) よね/Yone
