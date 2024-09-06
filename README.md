@@ -8,13 +8,11 @@ X (Twitter) bot providing disaster prevention information.
 
 ## Usage
 
-1. Run
-
-```
+```bash
 python -m src
 ```
 
-## LICENSE
+## License
 
 Licensed under the [Apache License 2.0](./LICENSE).
 
