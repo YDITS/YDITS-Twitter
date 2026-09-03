@@ -1,6 +1,6 @@
 # YDITS for Twitter
 
-[→ 日本語](./README_JP.md)
+[日本語で読む >](./README_JP.md)
 
 ## Overview
 
@@ -16,4 +16,4 @@ python -m src
 
 Licensed under the [Apache License 2.0](./LICENSE).
 
-Copyright &copy; よね/Yone
+Copyright © 2022-2026 よね/Yone

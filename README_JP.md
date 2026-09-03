@@ -1,6 +1,6 @@
 # YDITS for Twitter
 
-[→ English](./README.md)
+[Read in English >](./README.md)
 
 ## 概要
 
@@ -16,4 +16,4 @@ python -m src
 
 [Apache License 2.0](./LICENSE) のもとでライセンスされます。
 
-Copyright &copy; よね/Yone
+Copyright © 2022-2026 よね/Yone
