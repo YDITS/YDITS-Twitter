@@ -11,7 +11,6 @@ https://github.com/YDITS/YDITS-Twitter
 
 import sqlite3
 
-
 class Database:
     """データベース操作クラス"""
 
@@ -22,7 +21,7 @@ class Database:
         """
         self.database_file = database_file
         self.create_table()
-        return None
+        return
 
     def connect(self) -> sqlite3.Connection:
         """データベース接続"""
@@ -39,7 +38,7 @@ class Database:
         """
         connect.commit()
         connect.close()
-        return None
+        return
 
     def create_table(self) -> None:
         """データベースのテーブル作成"""
@@ -47,7 +46,7 @@ class Database:
         db_cur = self.cursor(connect=db_con)
         db_cur.execute("CREATE TABLE IF NOT EXISTS twitterApiConfig(name, value)")
         self.save(connect=db_con)
-        return None
+        return
 
     def get_twitter_token(self, *, name: str) -> list:
         db_con = self.connect()
@@ -62,4 +61,4 @@ class Database:
         db_cur = self.cursor(connect=db_con)
         db_cur.execute("INSERT INTO twitterApiConfig VALUES(?, ?)", (name, value))
         self.save(connect=db_con)
-        return None
+        return

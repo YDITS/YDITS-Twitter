@@ -13,7 +13,6 @@ import json
 
 import requests
 
-
 async def get_eqinfo() -> None | dict:
     url = "https://api.p2pquake.net/v2/history/"
 
@@ -27,7 +26,7 @@ async def get_eqinfo() -> None | dict:
     if res.status_code == requests.codes.ok:
         try:
             data = json.loads(res.text)
-        except Exception:
+        except Exception as e:
             return {"status": 0x0212, "data": e}
     else:
         return {"status": 0x0213, "data": res.status_code}

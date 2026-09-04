@@ -12,7 +12,6 @@ https://github.com/YDITS/YDITS-Twitter
 import requests_oauthlib
 from requests_oauthlib import OAuth1Session
 
-
 class RequestToken:
     request_token_url = "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write"
 
@@ -31,7 +30,6 @@ class RequestToken:
 
         return response
 
-
 class Authorization:
     base_authorization_url = "https://api.twitter.com/oauth/authorize"
 
@@ -42,7 +40,6 @@ class Authorization:
     def get_url(self) -> str:
         authorization_url = self.oauth.authorization_url(self.base_authorization_url)
         return authorization_url
-
 
 class AccessToken:
     access_token_url = "https://api.twitter.com/oauth/access_token"

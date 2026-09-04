@@ -9,6 +9,9 @@ https://github.com/YDITS/YDITS-Twitter
 
 """
 
-from ydits_twitter.api import kmoni
-from ydits_twitter.api import p2peqinfo
-from ydits_twitter.api import twitter
+DATABASE_FILE_PATH = "savedata.db"
+
+TWITTER_API = {
+    "CONSUMER_KEY": "",
+    "CONSUMER_SECRET": "",
+}

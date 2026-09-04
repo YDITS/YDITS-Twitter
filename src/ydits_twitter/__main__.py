@@ -16,9 +16,10 @@ import json
 
 from requests_oauthlib import OAuth1Session
 
-from . import api
-from ydits_twitter.database import Database
-
+import ydits_twitter
+from ydits_twitter import config
+from ydits_twitter import Database
+from ydits_twitter import api
 
 class YditsTwitter:
     def __init__(
@@ -64,7 +65,7 @@ class YditsTwitter:
 
         asyncio.run(self.mainloop())
 
-        return None
+        return
 
     def connection_setup(self, *, consumer_key: str, consumer_secret: str) -> dict:
         print("[INFO] アプリ連携が必要です。")
@@ -150,20 +151,20 @@ class YditsTwitter:
     def error(self, errCode, line, errContent) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
         print(f"[ERROR]\n{date}; {hex(errCode)}; Line: {str(line)}\n{errContent}\n")
-        return None
+        return
 
     def get_date(self) -> None:
         self.dateNow = datetime.datetime.now()
-        return None
+        return
 
     def gotNewdata(self) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
         print(f"[LOG]\n{date}; Earthquake information was retrieved.")
-        return None
+        return
 
     def upload(self, content, eew_isFinal) -> None:
         if self.eew_tree != "":
-            data = {"text": content, "repry": {"in_reply_to_tweet_id": self.eew_tree}}
+            data = {"text": content, "reply": {"in_reply_to_tweet_id": self.eew_tree}}
         else:
             data = {"text": content}
 
@@ -183,4 +184,41 @@ class YditsTwitter:
                 errContent=response.status_code,
             )
 
-        return None
+        return
+
+def main() -> None:
+    print(
+        f"{ydits_twitter.__title__}\n"
+        f"{ydits_twitter.__copyright__}\n\n"
+        "--------------------------------\n"
+    )
+
+    try:
+        database = Database(database_file=config.DATABASE_FILE_PATH)
+        access_token = database.get_twitter_token(name="accessToken")
+        access_tokenr_secret = database.get_twitter_token(name="accessTokenSecret")
+
+    except Exception as error:
+        print(f"[ERROR] データベースの読み込みに失敗しました。\n{error}")
+        return
+
+    if (access_token is not None) and (access_token != []):
+        access_token = access_token[0][0]
+    else:
+        access_token = None
+
+    if (access_tokenr_secret is not None) and (access_tokenr_secret != []):
+        access_tokenr_secret = access_tokenr_secret[0][0]
+    else:
+        access_tokenr_secret = None
+
+    YditsTwitter(
+        consumer_key=config.TWITTER_API["CONSUMER_KEY"],
+        consumer_secret=config.TWITTER_API["CONSUMER_SECRET"],
+        access_token=access_token,
+        access_token_secret=access_tokenr_secret,
+        database=database,
+    )
+
+if __name__ == "__main__":
+    main()
