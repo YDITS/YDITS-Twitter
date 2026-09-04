@@ -9,7 +9,7 @@ X (Twitter) bot providing disaster prevention information.
 ## Usage
 
 ```bash
-python -m src
+python -m ydits_twitter
 ```
 
 ## License

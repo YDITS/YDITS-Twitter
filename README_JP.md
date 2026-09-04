@@ -9,7 +9,7 @@
 ## 利用方法
 
 ```bash
-python -m src
+python -m ydits_twitter
 ```
 
 ## ライセンス
