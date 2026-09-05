@@ -8,6 +8,8 @@
 
 ## 利用方法
 
+### 実行
+
 ```bash
 python -m ydits_twitter
 ```

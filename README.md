@@ -8,6 +8,8 @@ X (Twitter) bot providing disaster prevention information.
 
 ## Usage
 
+### Run
+
 ```bash
 python -m ydits_twitter
 ```
