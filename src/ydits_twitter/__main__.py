@@ -18,7 +18,7 @@ from requests_oauthlib import OAuth1Session
 
 import ydits_twitter
 from ydits_twitter import config
-from ydits_twitter import Database
+from ydits_twitter.database import Database
 from ydits_twitter import api
 
 class YditsTwitter:

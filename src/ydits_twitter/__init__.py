@@ -9,9 +9,6 @@ https://github.com/YDITS/YDITS-Twitter
 
 """
 
-from ydits_twitter import config
-from ydits_twitter.database import Database
-
 __title__ = "YDITS for Twitter"
 __version__ = "2.4.0"
 __description__ = "X (Twitter) bot providing disaster prevention information"
