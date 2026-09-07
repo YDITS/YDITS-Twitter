@@ -19,7 +19,7 @@ class RequestToken:
         self.oauth = oauth
         return None
 
-    def get_token(self) -> None | dict:
+    def get_token(self) -> None | dict[str, str]:
         try:
             response = self.oauth.fetch_request_token(self.request_token_url)
         except ValueError:
@@ -61,7 +61,7 @@ class AccessToken:
             verifier=verifier,
         )
 
-    def get_token(self) -> None | dict:
+    def get_token(self) -> None | dict[str, str]:
         try:
             oauth_tokens = self.oauth.fetch_access_token(self.access_token_url)
 

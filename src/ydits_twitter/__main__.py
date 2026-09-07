@@ -67,7 +67,12 @@ class YditsTwitter:
 
         return
 
-    def connection_setup(self, *, consumer_key: str, consumer_secret: str) -> dict:
+    def connection_setup(
+        self,
+         *,
+         consumer_key: str,
+         consumer_secret: str,
+    ) -> dict[str, str]:
         print("[INFO] アプリ連携が必要です。")
 
         oauth = OAuth1Session(consumer_key, client_secret=consumer_secret)
@@ -78,10 +83,10 @@ class YditsTwitter:
             print("[ERROR] Consumer Key もしくは Consumer Secret Key が不正です。")
             exit()
 
-        owner_key = tokens.get("oauth_token")
-        owner_secret = tokens.get("oauth_token_secret")
+        owner_key = tokens["oauth_token"]
+        owner_secret = tokens["oauth_token_secret"]
 
-        authorization = api.twitter.Authorization(oauth=oauth)
+        authorization = twitter.Authorization(oauth=oauth)
         authorization_url = authorization.get_url()
         print("下記の連携用URLにアクセスして，アプリ連携をしてください。")
         print(f"{authorization_url}")
@@ -95,6 +100,8 @@ class YditsTwitter:
             verifier=verifier,
         )
         oauth_tokens = get_access_token.get_token()
+        if oauth_tokens is None:
+            exit()
 
         return oauth_tokens
 
