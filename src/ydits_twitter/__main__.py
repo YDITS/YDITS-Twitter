@@ -19,7 +19,7 @@ from requests_oauthlib import OAuth1Session
 import ydits_twitter
 from ydits_twitter import config
 from ydits_twitter.database import Database
-from ydits_twitter import api
+from ydits_twitter.api import twitter, kmoni
 
 class YditsTwitter:
     def __init__(
@@ -72,7 +72,7 @@ class YditsTwitter:
 
         oauth = OAuth1Session(consumer_key, client_secret=consumer_secret)
 
-        request_token = api.twitter.RequestToken(oauth=oauth)
+        request_token = twitter.RequestToken(oauth=oauth)
         tokens = request_token.get_token()
         if tokens is None:
             print("[ERROR] Consumer Key もしくは Consumer Secret Key が不正です。")
@@ -87,7 +87,7 @@ class YditsTwitter:
         print(f"{authorization_url}")
         verifier = input("認証ボタンをクリック後，表示された認証PINコードを入力> ")
 
-        get_access_token = api.twitter.AccessToken(
+        get_access_token = twitter.AccessToken(
             consumer_key=consumer_key,
             consumer_secret=consumer_secret,
             owner_key=owner_key,
@@ -103,7 +103,7 @@ class YditsTwitter:
             self.get_date()
 
             if self.cnt_getEew >= 1:
-                eewData = await api.kmoni.get_eew(self.dateNow)
+                eewData = await kmoni.get_eew(self.dateNow)
 
                 if eewData["status"] == 0x0101:
                     self.eew_repNum = eewData["data"]["raw"]["report_num"]
