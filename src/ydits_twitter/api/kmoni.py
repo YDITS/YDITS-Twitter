@@ -11,15 +11,18 @@ https://github.com/YDITS/YDITS-Twitter
 
 import datetime
 import json
+from typing import Any
 
 import requests
 
-def make_getNiedDT(DT: datetime.datetime) -> datetime.timedelta:
+
+def make_getNiedDT(DT: datetime.datetime) -> str:
     nideDate = DT + datetime.timedelta(seconds=-2)
     getNideDate = nideDate.strftime("%Y%m%d%H%M%S")
     return getNideDate
 
-async def get_eew(DT) -> None | dict:
+
+async def get_eew(DT: datetime.datetime) -> dict[str, Any]:
     getNiedDate = make_getNiedDT(DT)
     url = (
         f"https://www.lmoni.bosai.go.jp/monitor/webservice/hypo/eew/{getNiedDate}.json"
@@ -41,12 +44,9 @@ async def get_eew(DT) -> None | dict:
         return {"status": 0x0203, "data": res.status_code}
 
     eew_time = data["origin_time"]
-    eew_timeYear = eew_time[0:4]
-    eew_timeMonth = eew_time[4:6]
     eew_timeDay = eew_time[6:8]
     eew_timeHour = eew_time[8:10]
     eew_timeMinute = eew_time[10:12]
-    eew_timeSecond = eew_time[12:14]
 
     eew_repNum = data["report_num"]
 
@@ -59,8 +59,6 @@ async def get_eew(DT) -> None | dict:
         eew_alertflg = data["alertflg"]
     else:
         eew_alertflg = ""
-
-    eew_isTraining = data["is_training"]
 
     eew_isFinal = data["is_final"]
 

@@ -11,6 +11,7 @@ https://github.com/YDITS/YDITS-Twitter
 
 import sqlite3
 
+
 class Database:
     """データベース操作クラス"""
 
@@ -48,7 +49,7 @@ class Database:
         self.save(connect=db_con)
         return
 
-    def get_twitter_token(self, *, name: str) -> list:
+    def get_twitter_token(self, *, name: str) -> list[tuple[str, ...]]:
         db_con = self.connect()
         db_cur = self.cursor(connect=db_con)
         db_cur.execute(f"SELECT value FROM twitterApiConfig WHERE name=?", (name,))

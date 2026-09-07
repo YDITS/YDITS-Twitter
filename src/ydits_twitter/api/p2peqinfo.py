@@ -10,10 +10,12 @@ https://github.com/YDITS/YDITS-Twitter
 """
 
 import json
+from typing import Any
 
 import requests
 
-async def get_eqinfo() -> None | dict:
+
+async def get_eqinfo() -> dict[str, Any]:
     url = "https://api.p2pquake.net/v2/history/"
 
     params = {"zipcode": "", "codes": "551", "limit": "1"}
@@ -31,7 +33,6 @@ async def get_eqinfo() -> None | dict:
     else:
         return {"status": 0x0213, "data": res.status_code}
 
-    eqinfo_id = data[0]["id"]
     eqinfo_time = data[0]["earthquake"]["time"]
     eqinfo_type = data[0]["issue"]["type"]
 
@@ -67,8 +68,7 @@ async def get_eqinfo() -> None | dict:
         70: "7",
     }
 
-    if eqinfo_maxScale in eqinfo_Scales:
-        eqinfo_maxScale_put = eqinfo_Scales[eqinfo_maxScale]
+    eqinfo_maxScale_put = eqinfo_Scales.get(eqinfo_maxScale, "調査中")
 
     eqinfo_magnitude = data[0]["earthquake"]["hypocenter"]["magnitude"]
 
@@ -100,12 +100,9 @@ async def get_eqinfo() -> None | dict:
     if eqinfo_tsunami in eqinfo_tsunamiLevels:
         eqinfo_tsunami = eqinfo_tsunamiLevels[eqinfo_tsunami]
 
-    eqinfo_timeYear = eqinfo_time[0:4]
-    eqinfo_timeMonth = eqinfo_time[5:7]
     eqinfo_timeDay = eqinfo_time[8:10]
     eqinfo_timeHour = eqinfo_time[11:13]
     eqinfo_timeMinute = eqinfo_time[14:16]
-    eqinfo_timeSecond = eqinfo_time[17:19]
 
     # if eqinfo_maxScale < 30:
     # eqinfo_report = ''

@@ -13,13 +13,15 @@ import asyncio
 import datetime
 import inspect
 import json
+from typing import Any
 
 from requests_oauthlib import OAuth1Session
 
 import ydits_twitter
 from ydits_twitter import config
 from ydits_twitter.database import Database
-from ydits_twitter.api import twitter, kmoni
+from ydits_twitter.api import kmoni, p2peqinfo, twitter
+
 
 class YditsTwitter:
     def __init__(
@@ -69,9 +71,9 @@ class YditsTwitter:
 
     def connection_setup(
         self,
-         *,
-         consumer_key: str,
-         consumer_secret: str,
+        *,
+        consumer_key: str,
+        consumer_secret: str,
     ) -> dict[str, str]:
         print("[INFO] アプリ連携が必要です。")
 
@@ -127,14 +129,14 @@ class YditsTwitter:
                 else:
                     self.error(
                         errCode=eewData["status"],
-                        line=self.frame.f_lineno,
+                        line=self.frame.f_lineno if self.frame is not None else 0,
                         errContent=eewData["data"],
                     )
 
                 self.cnt_getEew = 0
 
             if self.cnt_getEqinfo >= 10:
-                eqinfoData = await api.p2peqinfo.get_eqinfo()
+                eqinfoData = await p2peqinfo.get_eqinfo()
 
                 if eqinfoData["status"] == 0x0101:
                     self.eqinfo_id = eqinfoData["data"]["raw"][0]["id"]
@@ -144,7 +146,7 @@ class YditsTwitter:
                 else:
                     self.error(
                         errCode=eqinfoData["status"],
-                        line=self.frame.f_lineno,
+                        line=self.frame.f_lineno if self.frame is not None else 0,
                         errContent=eqinfoData["data"],
                     )
 
@@ -155,7 +157,7 @@ class YditsTwitter:
 
             await asyncio.sleep(1)
 
-    def error(self, errCode, line, errContent) -> None:
+    def error(self, errCode: int, line: int, errContent: object) -> None:
         date = self.dateNow.strftime("%Y/%m/%d %H:%M:%S")
         print(f"[ERROR]\n{date}; {hex(errCode)}; Line: {str(line)}\n{errContent}\n")
         return
@@ -169,7 +171,8 @@ class YditsTwitter:
         print(f"[LOG]\n{date}; Earthquake information was retrieved.")
         return
 
-    def upload(self, content, eew_isFinal) -> None:
+    def upload(self, content: str, eew_isFinal: bool) -> None:
+        data: dict[str, str | dict[str, str]]
         if self.eew_tree != "":
             data = {"text": content, "reply": {"in_reply_to_tweet_id": self.eew_tree}}
         else:
@@ -181,24 +184,21 @@ class YditsTwitter:
             if eew_isFinal:
                 self.eew_tree = ""
             else:
-                data = json.loads(response.text)
-                self.eew_tree = data["data"]["id"]
+                response_data: dict[str, Any] = json.loads(response.text)
+                self.eew_tree = response_data["data"]["id"]
             print("Successfully distributed.\n")
         else:
             self.error(
                 errCode=0x0221,
-                line=self.frame.f_lineno,
+                line=self.frame.f_lineno if self.frame is not None else 0,
                 errContent=response.status_code,
             )
 
         return
 
+
 def main() -> None:
-    print(
-        f"{ydits_twitter.__title__}\n"
-        f"{ydits_twitter.__copyright__}\n\n"
-        "--------------------------------\n"
-    )
+    show_logo()
 
     try:
         database = Database(database_file=config.DATABASE_FILE_PATH)
@@ -209,12 +209,12 @@ def main() -> None:
         print(f"[ERROR] データベースの読み込みに失敗しました。\n{error}")
         return
 
-    if (access_token is not None) and (access_token != []):
+    if access_token:
         access_token = access_token[0][0]
     else:
         access_token = None
 
-    if (access_tokenr_secret is not None) and (access_tokenr_secret != []):
+    if access_tokenr_secret:
         access_tokenr_secret = access_tokenr_secret[0][0]
     else:
         access_tokenr_secret = None
@@ -226,6 +226,15 @@ def main() -> None:
         access_token_secret=access_tokenr_secret,
         database=database,
     )
+
+
+def show_logo() -> None:
+    print(
+        f"{ydits_twitter.__title__}  Ver. {ydits_twitter.__version__}\n"
+        f"{ydits_twitter.__copyright__}\n\n"
+        "--------------------------------\n"
+    )
+
 
 if __name__ == "__main__":
     main()
